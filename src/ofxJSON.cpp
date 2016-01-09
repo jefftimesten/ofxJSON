@@ -1,34 +1,34 @@
-#include "ofxJSONElement.h"
+#include "ofxJSON.h"
 
 
-ofxJSONElement::ofxJSONElement()
+ofxJSON::ofxJSON()
 {
 }
 
 
-ofxJSONElement::ofxJSONElement(const Json::Value& v): Json::Value(v)
+ofxJSON::ofxJSON(const Json::Value& v): Json::Value(v)
 {
 }
 
 
-ofxJSONElement::ofxJSONElement(const std::string& jsonString)
+ofxJSON::ofxJSON(const std::string& jsonString)
 {
     parse(jsonString);
 }
 
 
-ofxJSONElement::~ofxJSONElement()
+ofxJSON::~ofxJSON()
 {
 }
 
 
-bool ofxJSONElement::parse(const std::string& jsonString)
+bool ofxJSON::parse(const std::string& jsonString)
 {
     Json::Reader reader;
 
     if (!reader.parse( jsonString, *this ))
     {
-        ofLogError("ofxJSONElement::parse") << "Unable to parse string: " << reader.getFormattedErrorMessages();
+        ofLogError("ofxJSON") << "parse: Unable to parse string: " << reader.getFormattedErrorMessages();
         return false;
     }
 
@@ -36,7 +36,7 @@ bool ofxJSONElement::parse(const std::string& jsonString)
 }
 
 
-bool ofxJSONElement::open(const string& filename)
+bool ofxJSON::open(const string& filename)
 {
     if (filename.find("http://") == 0 || filename.find("https://") == 0)
     {
@@ -49,7 +49,7 @@ bool ofxJSONElement::open(const string& filename)
 }
 
 
-bool ofxJSONElement::openLocal(const std::string& filename)
+bool ofxJSON::openLocal(const std::string& filename)
 {
     ofBuffer buffer = ofBufferFromFile(filename);
 
@@ -57,7 +57,7 @@ bool ofxJSONElement::openLocal(const std::string& filename)
 
     if (!reader.parse(buffer.getText(), *this))
     {
-        ofLogError("ofxJSONElement::openLocal") << "Unable to parse " << filename << ": " << reader.getFormattedErrorMessages();
+        ofLogError("ofxJSON") << "openLocal: Unable to parse " << filename << ": " << reader.getFormattedErrorMessages();
         return false;
     }
     else
@@ -67,7 +67,7 @@ bool ofxJSONElement::openLocal(const std::string& filename)
 }
 
 
-bool ofxJSONElement::openRemote(const std::string& filename)
+bool ofxJSON::openRemote(const std::string& filename)
 {
     std::string result = ofLoadURL(filename).data.getText();
 
@@ -75,7 +75,7 @@ bool ofxJSONElement::openRemote(const std::string& filename)
 
     if (!reader.parse(result, *this))
     {
-        ofLogError("ofxJSONElement::openRemote") << "Unable to parse " << filename << ": " << reader.getFormattedErrorMessages();
+        ofLogError("ofxJSON") << "openRemote: Unable to parse " << filename << ": " << reader.getFormattedErrorMessages();
         return false;
     }
 
@@ -83,13 +83,13 @@ bool ofxJSONElement::openRemote(const std::string& filename)
 }
 
 
-bool ofxJSONElement::save(const std::string& filename, bool pretty) const
+bool ofxJSON::save(const std::string& filename, bool pretty) const
 {
     ofFile file;
 
     if (!file.open(filename, ofFile::WriteOnly))
     {
-        ofLogError("ofxJSONElement::save") << "Unable to open " << file.getAbsolutePath() << ".";
+        ofLogError("ofxJSON") << "save: Unable to open " << file.getAbsolutePath() << ".";
         return false;
     }
 
@@ -102,7 +102,7 @@ bool ofxJSONElement::save(const std::string& filename, bool pretty) const
         file << writer.write( *this ) << endl;
     }
 
-    ofLogVerbose("ofxJSONElement::save") << "JSON saved to " << file.getAbsolutePath() << ".";
+    ofLogVerbose("ofxJSON") << "save: JSON saved to " << file.getAbsolutePath() << ".";
 
     file.close();
 
@@ -110,7 +110,7 @@ bool ofxJSONElement::save(const std::string& filename, bool pretty) const
 }
 
 
-std::string ofxJSONElement::getRawString(bool pretty) const
+std::string ofxJSON::getRawString(bool pretty) const
 {
     std::string raw;
 
@@ -128,7 +128,7 @@ std::string ofxJSONElement::getRawString(bool pretty) const
     return raw;
 }
 
-std::string ofxJSONElement::toString(Json::ValueType type)
+std::string ofxJSON::toString(Json::ValueType type)
 {
     switch (type)
     {
@@ -149,7 +149,7 @@ std::string ofxJSONElement::toString(Json::ValueType type)
         case Json::objectValue:
             return "object";
         default:
-            ofLogError("ofxJSONElement::toString") << "Unknown Json::ValueType.";
+            ofLogError("ofxJSON") << "toString: Unknown Json::ValueType.";
             return "unknown";
     }
 }

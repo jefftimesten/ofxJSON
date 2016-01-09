@@ -11,6 +11,6 @@ public:
     void setup();
     void draw();
 
-    ofxJSONElement result;
+    ofxJSON result;
 
 };

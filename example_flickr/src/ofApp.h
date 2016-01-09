@@ -11,7 +11,7 @@ public:
     void setup();
     void draw();
 
-    ofxJSONElement response;
+    ofxJSON response;
     std::vector<ofImage> images;
 
 };
