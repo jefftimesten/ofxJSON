@@ -15,6 +15,7 @@
 
 #include <string>
 #include "json/json.h"
+#include "ofMain.h"
 #include "ofLog.h"
 #include "ofURLFileLoader.h"
 
@@ -40,5 +41,12 @@ public:
     std::string getRawString(bool pretty = true) const;
 
     static std::string toString(Json::ValueType type);
+
+    static const ofxJSONElement Encode(const ofPoint& data);
+    static const ofxJSONElement Encode(const ofVec2f& data);
+    static const ofxJSONElement Encode(const ofRectangle& data);
+
+    template<typename T>
+    static const T Decode(const ofxJSONElement& json);
 
 };
